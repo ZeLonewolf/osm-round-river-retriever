@@ -1,0 +1,11 @@
+version: '3'
+services:
+  database:
+    image: "postgres"
+    environment:
+        POSTGRES_HOST_AUTH_METHOD: trust
+    volumes:
+      - database-data:/var/lib/postgresql/data/ # persist data even if container shuts down
+      - /var/run/postgresql:/var/run/postgresql
+volumes:
+  database-data:
