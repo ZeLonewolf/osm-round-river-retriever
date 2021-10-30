@@ -1,0 +1,26 @@
+version: '2'
+services:
+  db:
+    image: db:v1
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-q", "-d", "postgres", "-U", "root" ]
+      timeout: 45s
+      interval: 10s
+      retries: 10
+    restart: always
+    build:
+      context: .
+      dockerfile: Dockerfile.db
+    ports:
+      - "127.0.0.1:5432:5432"
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_HOST_AUTH_METHOD=trust
+      - PG_WORK_MEM
+      - PG_MAINTENANCE_WORK_MEM
+      - APP_DB_USER=brian
+      - APP_DB_NAME=brian
+    volumes:
+      - /var/run/postgresql:/var/run/postgresql
+      - ./db:/docker-entrypoint-initdb.d
